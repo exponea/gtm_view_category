@@ -1,16 +1,24 @@
-﻿___INFO___
+﻿___TERMS_OF_SERVICE___
+
+By creating or modifying this file you agree to Google Tag Manager's Community
+Template Gallery Developer Terms of Service available at
+https://developers.google.com/tag-manager/gallery-tos (or such other URL as
+Google may provide), as modified from time to time.
+
+
+___INFO___
 
 {
   "displayName": "Exponea tracking of view_category event",
   "description": "Exponea tracking of the view_category event. For more information please refer to the documentation: https://docs.exponea.com/docs/web-tracking#section-view_category",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
-  "categories": ["ANALYTICS", "CONVERSIONS", "EXPERIMENTATION"],
   "type": "TAG",
   "version": 1,
   "brand": {
-    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAuCAYAAAC8jpA0AAAACXBIWXMAAAsSAAALEgHS3X78AAAA9UlEQVRogWP8c435AMMQA4x/rjH/H2hHkAqYBtoB5IBRR9MLjDqaXmDU0fQCo46mFxh1NL3AqKPpBViobeDRU6YMzbPY8KrxsWVhyIk/SLYdVHf0u48sDNfvfsWrxkBdgCI7RpMHNhDphRmq1gY/KTKT5o7uKD1AdTOHZPKgSh9x825Lhpy271jlNJW5McQGXemBDrCVJKOlB7XAlCpOvPKqCm8pMp8mjvZ1PU4LY+FgSCYPikoPeUcDsvRFeglQVH4PyZAeko4eHYCkFxh1NL3AqKPpBUYdTS8w6mh6gVFH0wuMOppeYEg6moWBgcFxoB1BKgAAsGMsB1E8RAgAAAAASUVORK5CYII=",
-    "id": "Exponea"
+    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAuCAYAAAC8jpA0AAAACXBIWXMAAAsSAAALEgHS3X78AAAA9UlEQVRogWP8c435AMMQA4x/rjH/H2hHkAqYBtoB5IBRR9MLjDqaXmDU0fQCo46mFxh1NL3AqKPpBViobeDRU6YMzbPY8KrxsWVhyIk/SLYdVHf0u48sDNfvfsWrxkBdgCI7RpMHNhDphRmq1gY/KTKT5o7uKD1AdTOHZPKgSh9x825Lhpy271jlNJW5McQGXemBDrCVJKOlB7XAlCpOvPKqCm8pMp8mjvZ1PU4LY+FgSCYPikoPeUcDsvRFeglQVH4PyZAeko4eHYCkFxh1NL3AqKPpBUYdTS8w6mh6gVFH0wuMOppeYEg6moWBgcFxoB1BKgAAsGMsB1E8RAgAAAAASUVORK5CYII\u003d",
+    "displayName": "",
+    "id": "brand_dummy"
   },
   "containerContexts": [
     "WEB"
@@ -90,6 +98,26 @@ ___TEMPLATE_PARAMETERS___
     ]
   }
 ]
+
+
+___SANDBOXED_JS_FOR_WEB_TEMPLATE___
+
+const callInWindow = require('callInWindow');
+
+var exponea_track = callInWindow('exponea.track', "view_category", {
+   'category_id':data.categoryID,
+   'category_name':data.categoryName,
+   'category_listed_products':data.categoryListedProducts,
+   'category_1':data.category1,
+   'category_2':data.category2,
+   'category_3':data.category3,
+   'categories_path':data.categoriesPath,
+   'categories_ids':data.categoriesIDs,
+   'local_currency':data.localCurrency,
+   'language':data.language
+});
+
+data.gtmOnSuccess();
 
 
 ___WEB_PERMISSIONS___
@@ -198,26 +226,13 @@ ___WEB_PERMISSIONS___
 ]
 
 
-___SANDBOXED_JS_FOR_WEB_TEMPLATE___
+___TESTS___
 
-const callInWindow = require('callInWindow');
-
-var exponea_track = callInWindow('exponea.track', "view_category", {
-   'category_id':data.categoryID,
-   'category_name':data.categoryName,
-   'category_listed_products':data.categoryListedProducts,
-   'category_1':data.category1,
-   'category_2':data.category2,
-   'category_3':data.category3,
-   'categories_path':data.categoriesPath,
-   'categories_ids':data.categoriesIDs,
-   'local_currency':data.localCurrency,
-   'language':data.language
-});
-
-data.gtmOnSuccess();
+scenarios: []
 
 
 ___NOTES___
 
-Created on 23/10/2019, 14:18:29
+Created on 25/11/2019, 10:21:36
+
+
