@@ -12,8 +12,7 @@ ___INFO___
   "displayName": "Exponea tracking of view_category event",
   "categories": ["ANALYTICS", "CONVERSIONS", "EXPERIMENTATION"],
   "description": "Exponea tracking of the view_category event. For more information please refer to the documentation: https://docs.exponea.com/docs/web-tracking#section-view_category",
-  "securityGroups": [],
-  "id": "cvt_temp_public_id",  
+  "securityGroups": [],  
   "type": "TAG",
   "version": 1,
   "brand": {
