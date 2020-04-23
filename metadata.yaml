@@ -1,5 +1,5 @@
 homepage: "https://exponea.com/"
 documentation: "https://github.com/exponea/gtm_view_category/blob/master/README.md"
 versions:
-  - sha: 9d33d33618de2a42907a7958a4393ecb86af4924
+  - sha: d658ada485eced9fcdae9a53c160eb40d749c495
     changeNotes: Release of Exponea Tag.
