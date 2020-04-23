@@ -9,16 +9,20 @@ Google may provide), as modified from time to time.
 ___INFO___
 
 {
-  "displayName": "Exponea tracking of view_category event",
-  "categories": ["ANALYTICS", "CONVERSIONS", "EXPERIMENTATION"],
-  "description": "Exponea tracking of the view_category event.",
+  "displayName": "Exponea Tag",
+  "categories": [
+    "ANALYTICS",
+    "CONVERSIONS",
+    "EXPERIMENTATION"
+  ],
+  "description": "Exponea Initialisation, Event Tracking, Customer Identification and Upading of Customer Attributes.",
   "securityGroups": [],
-  "id": "cvt_temp_public_id",  
+  "id": "cvt_temp_public_id",
   "type": "TAG",
   "version": 1,
   "brand": {
     "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAuCAYAAAC8jpA0AAAACXBIWXMAAAsSAAALEgHS3X78AAAA9UlEQVRogWP8c435AMMQA4x/rjH/H2hHkAqYBtoB5IBRR9MLjDqaXmDU0fQCo46mFxh1NL3AqKPpBViobeDRU6YMzbPY8KrxsWVhyIk/SLYdVHf0u48sDNfvfsWrxkBdgCI7RpMHNhDphRmq1gY/KTKT5o7uKD1AdTOHZPKgSh9x825Lhpy271jlNJW5McQGXemBDrCVJKOlB7XAlCpOvPKqCm8pMp8mjvZ1PU4LY+FgSCYPikoPeUcDsvRFeglQVH4PyZAeko4eHYCkFxh1NL3AqKPpBUYdTS8w6mh6gVFH0wuMOppeYEg6moWBgcFxoB1BKgAAsGMsB1E8RAgAAAAASUVORK5CYII\u003d",
-    "displayName": "Exponea Tracking",
+    "displayName": "Exponea",
     "id": "Exponea"
   },
   "containerContexts": [
@@ -31,70 +35,200 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "displayName": "view_category event",
-    "name": "viewCategory",
-    "groupStyle": "ZIPPY_CLOSED",
     "type": "GROUP",
+    "name": "initialisationGroup",
+    "displayName": "Initialise Exponea",
+    "groupStyle": "ZIPPY_CLOSED",
     "subParams": [
       {
-        "displayName": "Category ID",
-        "simpleValueType": true,
-        "name": "categoryID",
-        "type": "TEXT"
+        "type": "TEXT",
+        "name": "projectToken",
+        "displayName": "",
+        "simpleValueType": true
       },
       {
-        "displayName": "Category name",
-        "simpleValueType": true,
-        "name": "categoryName",
-        "type": "TEXT"
+        "type": "CHECKBOX",
+        "name": "trackSession",
+        "checkboxText": "Track Session",
+        "simpleValueType": true
       },
       {
-        "displayName": "Category of listed products",
-        "simpleValueType": true,
-        "name": "categoryListedProducts",
-        "type": "TEXT"
+        "type": "CHECKBOX",
+        "name": "trackPageVisit",
+        "checkboxText": "Track page_visit",
+        "simpleValueType": true
       },
       {
-        "displayName": "Category 1",
-        "simpleValueType": true,
-        "name": "category1",
-        "type": "TEXT"
-      },
+        "type": "CHECKBOX",
+        "name": "trackGACookie",
+        "checkboxText": "Track GA Cookies",
+        "simpleValueType": true
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "eventTrackingGroup",
+    "displayName": "Track Event",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
       {
-        "displayName": "Category 2",
-        "simpleValueType": true,
-        "name": "category2",
-        "type": "TEXT"
-      },
+        "type": "RADIO",
+        "name": "eventTrackingRadio",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "standardEvent",
+            "displayValue": "Standard event",
+            "subParams": [
+              {
+                "type": "SELECT",
+                "name": "standardEventList",
+                "displayName": "",
+                "macrosInSelect": true,
+                "selectItems": [
+                  {
+                    "value": "view_category",
+                    "displayValue": "view_category"
+                  },
+                  {
+                    "value": "checkout",
+                    "displayValue": "checkout"
+                  },
+                  {
+                    "value": "cart_update",
+                    "displayValue": "cart_update"
+                  },
+                  {
+                    "value": "consent",
+                    "displayValue": "consent"
+                  },
+                  {
+                    "value": "purchase",
+                    "displayValue": "purchase"
+                  },
+                  {
+                    "value": "purchase_item",
+                    "displayValue": "purchase_item"
+                  },
+                  {
+                    "value": "view_item",
+                    "displayValue": "view_item"
+                  }
+                ],
+                "simpleValueType": true,
+                "defaultValue": "noneSelected"
+              },
+              {
+                "type": "SIMPLE_TABLE",
+                "name": "standardEventProperties",
+                "displayName": "",
+                "simpleTableColumns": [
+                  {
+                    "defaultValue": "",
+                    "displayName": "Attribute Name",
+                    "name": "attributeName",
+                    "type": "TEXT"
+                  },
+                  {
+                    "defaultValue": "",
+                    "displayName": "Attribute Value",
+                    "name": "attributeValue",
+                    "type": "TEXT"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "value": "customEvent",
+            "displayValue": "Custom event",
+            "subParams": [
+              {
+                "type": "TEXT",
+                "name": "customEventName",
+                "displayName": "Event Name",
+                "simpleValueType": true
+              },
+              {
+                "type": "SIMPLE_TABLE",
+                "name": "customEventProperties",
+                "displayName": "",
+                "simpleTableColumns": [
+                  {
+                    "defaultValue": "",
+                    "displayName": "Attribute Name",
+                    "name": "attributeName",
+                    "type": "TEXT"
+                  },
+                  {
+                    "defaultValue": "",
+                    "displayName": "Attribute Value",
+                    "name": "attributeValue",
+                    "type": "TEXT"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "simpleValueType": true
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "updateCustomerGroup",
+    "displayName": "Upadte Customer Attributes",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
       {
-        "displayName": "Category 3",
-        "simpleValueType": true,
-        "name": "category3",
-        "type": "TEXT"
-      },
+        "type": "SIMPLE_TABLE",
+        "name": "updateCustomerAttributes",
+        "displayName": "",
+        "simpleTableColumns": [
+          {
+            "defaultValue": "",
+            "displayName": "Attribute Name",
+            "name": "attributeName",
+            "type": "TEXT"
+          },
+          {
+            "defaultValue": "",
+            "displayName": "Attribute Value",
+            "name": "attributeValue",
+            "type": "TEXT"
+          }
+        ],
+        "newRowButtonText": "Add attribute"
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "identifyCustomerGroup",
+    "displayName": "Indentify Customer",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
       {
-        "displayName": "Categories path",
-        "simpleValueType": true,
-        "name": "categoriesPath",
-        "type": "TEXT"
-      },
-      {
-        "displayName": "Categories IDs",
-        "simpleValueType": true,
-        "name": "categoriesIDs",
-        "type": "TEXT"
-      },
-      {
-        "displayName": "Local currency",
-        "simpleValueType": true,
-        "name": "localCurrency",
-        "type": "TEXT"
-      },
-      {
-        "displayName": "Language",
-        "simpleValueType": true,
-        "name": "language",
-        "type": "TEXT"
+        "type": "SIMPLE_TABLE",
+        "name": "identifyCustomer",
+        "displayName": "Specify identifiers",
+        "simpleTableColumns": [
+          {
+            "defaultValue": "",
+            "displayName": "Identifier Name",
+            "name": "attributeName",
+            "type": "TEXT"
+          },
+          {
+            "defaultValue": "",
+            "displayName": "Identifier Value",
+            "name": "attributeValue",
+            "type": "TEXT"
+          }
+        ],
+        "newRowButtonText": "Add identifier"
       }
     ]
   }
@@ -104,19 +238,58 @@ ___TEMPLATE_PARAMETERS___
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const callInWindow = require('callInWindow');
+const injectScript = require('injectScript');
 
-var exponea_track = callInWindow('exponea.track', "view_category", {
-   'category_id':data.categoryID,
-   'category_name':data.categoryName,
-   'category_listed_products':data.categoryListedProducts,
-   'category_1':data.category1,
-   'category_2':data.category2,
-   'category_3':data.category3,
-   'categories_path':data.categoriesPath,
-   'categories_ids':data.categoriesIDs,
-   'local_currency':data.localCurrency,
-   'language':data.language
-});
+if (data.projectToken){
+   injectScript('https://api.exponea.com/js/exponea.min.js', initializeExponea);     
+} else {
+   exponeaFunctions();
+}
+
+function exponeaFunctions(){
+   if (data.eventTrackingRadio == "standardEvent" && data.standardEventList != "noneSelected"){    
+      var convertedAttributes = parseToSingleJson(data.standardEventProperties);    
+      var trackStandardEvent = callInWindow('exponea.track', data.standardEventList, convertedAttributes);   
+   } else if (data.eventTrackingRadio == "customEvent") {
+      var convertedAttributes = parseToSingleJson(data.customEventProperties);      
+      var trackCustomEvent = callInWindow('exponea.track', data.customEventName, convertedAttributes);
+   }
+
+   if (data.updateCustomerAttributes){
+      var convertedAttributes = parseToSingleJson(data.updateCustomerAttributes);
+      var exponeaUpdate = callInWindow('exponea.update', convertedAttributes);
+   }
+
+   if (data.identifyCustomer){
+      var convertedAttributes = parseToSingleJson(data.identifyCustomer);
+      var exponeaIdentify = callInWindow('exponea.identify', convertedAttributes);
+   }
+}
+
+function parseToSingleJson(arrayOfObjects){
+   var attributes = arrayOfObjects;
+   var convertedAttributes = {};
+   for (var i = 0; i < attributes.length; i++) {         
+      var attributeName = attributes[i].attributeName;
+      var attributeValue = attributes[i].attributeValue;
+      convertedAttributes[attributeName] = attributeValue;                   
+   }
+   return convertedAttributes;
+}
+
+function initializeExponea(){
+   var exponeaInitialize = callInWindow('exponea.initialize',{     
+      "token": data.projectToken,
+      "ping": {
+         "enabled": data.trackSession
+      },
+      "track": {
+         "visits": data.trackPageVisit,
+         "google_analytics": data.trackGACookie
+      }                                   
+   });
+   exponeaFunctions();
+}
 
 data.gtmOnSuccess();
 
@@ -213,6 +386,123 @@ ___WEB_PERMISSIONS___
                     "boolean": true
                   }
                 ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "exponea.update"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "exponea.identify"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "exponea.initialize"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
               }
             ]
           }
@@ -221,6 +511,50 @@ ___WEB_PERMISSIONS___
     },
     "clientAnnotations": {
       "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "inject_script",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "urls",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "https://api.exponea.com/js/exponea.min.js"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "logging",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "environments",
+          "value": {
+            "type": 1,
+            "string": "debug"
+          }
+        }
+      ]
     },
     "isRequired": true
   }
