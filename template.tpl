@@ -43,7 +43,13 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "TEXT",
         "name": "projectToken",
-        "displayName": "",
+        "displayName": "Project token",
+        "simpleValueType": true
+      },
+      {
+        "type": "TEXT",
+        "name": "targetAPI",
+        "displayName": "API endpoint",
         "simpleValueType": true
       },
       {
@@ -280,6 +286,7 @@ function parseToSingleJson(arrayOfObjects){
 function initializeExponea(){
    var exponeaInitialize = callInWindow('exponea.initialize',{     
       "token": data.projectToken,
+      "target":data.targetAPI,
       "ping": {
          "enabled": data.trackSession
       },
