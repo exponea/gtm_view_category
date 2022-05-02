@@ -303,7 +303,7 @@ function exponeaFunctions() {
     if (data.eventTrackingRadio === 'standardEvent' && data.standardEventList !== 'noneSelected') {
         callInWindow('exponea.track', data.standardEventList, arrayToObject(data.standardEventProperties));
     } else if (data.eventTrackingRadio === 'customEvent') {
-        callInWindow('exponea.track', data.standardEventList, arrayToObject(data.customEventProperties));
+        callInWindow('exponea.track', data.customEventName, arrayToObject(data.customEventProperties));
     } else if (data.eventTrackingRadio === 'eeEvent') {
         callInWindow('exponea.trackEnhancedEcommerce', data.eeObj, data.eeKind);
     }
