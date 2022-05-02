@@ -1,6 +1,8 @@
 homepage: "https://exponea.com/"
 documentation: "https://github.com/exponea/gtm_view_category/blob/master/README.md"
 versions:
+  - sha: 8b03dd0a8006d0fc440717e86183b0f7d1eded61
+    changeNotes: Fix custom event tracking.
   - sha: 4275b1c33ad253f376f7dddb8af8ba5914bb7fad
     changeNotes: Add sGTM support.
   - sha: f118270d6a9989ee532deda06108122bfeebe32c
