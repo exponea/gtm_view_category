@@ -273,6 +273,9 @@ function exponeaFunctions(){
 }
 
 function parseToSingleJson(arrayOfObjects){
+  if (arrayOfObjects === undefined || arrayOfObjects === null) {
+    return {};
+  }
    var attributes = arrayOfObjects;
    var convertedAttributes = {};
    for (var i = 0; i < attributes.length; i++) {         
