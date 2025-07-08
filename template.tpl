@@ -273,6 +273,9 @@ function exponeaFunctions(){
 }
 
 function parseToSingleJson(arrayOfObjects){
+  if (arrayOfObjects === undefined || arrayOfObjects === null) {
+    return {};
+  }
    var attributes = arrayOfObjects;
    var convertedAttributes = {};
    for (var i = 0; i < attributes.length; i++) {         
@@ -552,7 +555,434 @@ ___WEB_PERMISSIONS___
 
 ___TESTS___
 
-scenarios: []
+scenarios:
+- name: Test standard event tracking
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'standardEvent',
+      standardEventList: 'view_category',
+      standardEventProperties: [
+        {attributeName: 'category', attributeValue: 'electronics'},
+        {attributeName: 'subcategory', attributeValue: 'phones'}
+      ]
+    };
+    
+    mock('callInWindow', function(method, eventName, attributes) {
+      assertThat(method).isEqualTo('exponea.track');
+      assertThat(eventName).isEqualTo('view_category');
+      assertThat(attributes.category).isEqualTo('electronics');
+      assertThat(attributes.subcategory).isEqualTo('phones');
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test custom event tracking
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'customEvent',
+      customEventName: 'custom_action',
+      customEventProperties: [
+        {attributeName: 'action_type', attributeValue: 'button_click'},
+        {attributeName: 'page', attributeValue: 'homepage'}
+      ]
+    };
+    
+    mock('callInWindow', function(method, eventName, attributes) {
+      assertThat(method).isEqualTo('exponea.track');
+      assertThat(eventName).isEqualTo('custom_action');
+      assertThat(attributes.action_type).isEqualTo('button_click');
+      assertThat(attributes.page).isEqualTo('homepage');
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test customer attribute update
+  code: |-
+    const testData = {
+      updateCustomerAttributes: [
+        {attributeName: 'email', attributeValue: 'user@example.com'},
+        {attributeName: 'subscription', attributeValue: 'premium'}
+      ]
+    };
+    
+    mock('callInWindow', function(method, attributes) {
+      assertThat(method).isEqualTo('exponea.update');
+      assertThat(attributes.email).isEqualTo('user@example.com');
+      assertThat(attributes.subscription).isEqualTo('premium');
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test customer identification
+  code: |-
+    const testData = {
+      identifyCustomer: [
+        {attributeName: 'email', attributeValue: 'user@example.com'},
+        {attributeName: 'user_id', attributeValue: '12345'}
+      ]
+    };
+    
+    mock('callInWindow', function(method, attributes) {
+      assertThat(method).isEqualTo('exponea.identify');
+      assertThat(attributes.email).isEqualTo('user@example.com');
+      assertThat(attributes.user_id).isEqualTo('12345');
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test initialization with project token
+  code: |-
+    const testData = {
+      projectToken: 'test-token',
+      targetAPI: 'https://api.exponea.com',
+      trackSession: true,
+      trackPageVisit: true,
+      trackGACookie: false
+    };
+    
+    mock('callInWindow', function(method, config) {
+      if (method === 'exponea.initialize') {
+        assertThat(config.token).isEqualTo('test-token');
+        assertThat(config.target).isEqualTo('https://api.exponea.com');
+        assertThat(config.ping.enabled).isEqualTo(true);
+        assertThat(config.track.visits).isEqualTo(true);
+        assertThat(config.track.google_analytics).isEqualTo(false);
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      assertThat(url).isEqualTo('https://api.exponea.com/js/exponea.min.js');
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test skip tracking when noneSelected
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'standardEvent',
+      standardEventList: 'noneSelected'
+    };
+    
+    let trackCalled = false;
+    mock('callInWindow', function(method) {
+      if (method === 'exponea.track') {
+        trackCalled = true;
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+    
+    assertThat(trackCalled).isFalse();
+- name: Test empty standardEventProperties
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'standardEvent',
+      standardEventList: 'view_item',
+      standardEventProperties: []
+    };
+    
+    mock('callInWindow', function(method, eventName, attributes) {
+      if (method === 'exponea.track') {
+        assertThat(eventName).isEqualTo('view_item');
+        // Check that attributes is an empty object by checking if it's truthy but has no enumerable properties
+        let hasProperties = false;
+        for (let key in attributes) {
+          hasProperties = true;
+          break;
+        }
+        assertThat(hasProperties).isFalse();
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test empty customEventProperties
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'customEvent',
+      customEventName: 'test_event',
+      customEventProperties: []
+    };
+    
+    mock('callInWindow', function(method, eventName, attributes) {
+      if (method === 'exponea.track') {
+        assertThat(eventName).isEqualTo('test_event');
+        // Check that attributes is an empty object
+        let hasProperties = false;
+        for (let key in attributes) {
+          hasProperties = true;
+          break;
+        }
+        assertThat(hasProperties).isFalse();
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test empty updateCustomerAttributes array
+  code: |-
+    const testData = {
+      updateCustomerAttributes: []
+    };
+    
+    mock('callInWindow', function(method, attributes) {
+      if (method === 'exponea.update') {
+        // Check that attributes is an empty object
+        let hasProperties = false;
+        for (let key in attributes) {
+          hasProperties = true;
+          break;
+        }
+        assertThat(hasProperties).isFalse();
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test empty identifyCustomer array
+  code: |-
+    const testData = {
+      identifyCustomer: []
+    };
+    
+    mock('callInWindow', function(method, attributes) {
+      if (method === 'exponea.identify') {
+        // Check that attributes is an empty object
+        let hasProperties = false;
+        for (let key in attributes) {
+          hasProperties = true;
+          break;
+        }
+        assertThat(hasProperties).isFalse();
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test null updateCustomerAttributes
+  code: |-
+    const testData = {
+      updateCustomerAttributes: null
+    };
+    
+    mock('callInWindow', function(method, attributes) {
+      if (method === 'exponea.update') {
+        // Check that attributes is an empty object when null is passed
+        let hasProperties = false;
+        for (let key in attributes) {
+          hasProperties = true;
+          break;
+        }
+        assertThat(hasProperties).isFalse();
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test null identifyCustomer
+  code: |-
+    const testData = {
+      identifyCustomer: null
+    };
+    
+    mock('callInWindow', function(method, attributes) {
+      if (method === 'exponea.identify') {
+        // Check that attributes is an empty object when null is passed
+        let hasProperties = false;
+        for (let key in attributes) {
+          hasProperties = true;
+          break;
+        }
+        assertThat(hasProperties).isFalse();
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test undefined standardEventProperties
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'standardEvent',
+      standardEventList: 'view_category'
+      // standardEventProperties is undefined
+    };
+    
+    mock('callInWindow', function(method, eventName, attributes) {
+      if (method === 'exponea.track') {
+        assertThat(eventName).isEqualTo('view_category');
+        // Check that attributes is an empty object when undefined is passed
+        let hasProperties = false;
+        for (let key in attributes) {
+          hasProperties = true;
+          break;
+        }
+        assertThat(hasProperties).isFalse();
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test undefined customEventProperties
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'customEvent',
+      customEventName: 'undefined_props_test'
+      // customEventProperties is undefined
+    };
+    
+    mock('callInWindow', function(method, eventName, attributes) {
+      if (method === 'exponea.track') {
+        assertThat(eventName).isEqualTo('undefined_props_test');
+        // Check that attributes is an empty object when undefined is passed
+        let hasProperties = false;
+        for (let key in attributes) {
+          hasProperties = true;
+          break;
+        }
+        assertThat(hasProperties).isFalse();
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+- name: Test undefined updateCustomerAttributes
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'standardEvent',
+      standardEventList: 'view_item',
+      standardEventProperties: [
+        {attributeName: 'test', attributeValue: 'value'}
+      ]
+      // updateCustomerAttributes is undefined - should not call exponea.update
+    };
+    
+    let updateCalled = false;
+    mock('callInWindow', function(method, param1, param2) {
+      if (method === 'exponea.update') {
+        updateCalled = true;
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+    
+    assertThat(updateCalled).isFalse();
+- name: Test undefined identifyCustomer
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'standardEvent',
+      standardEventList: 'view_item',
+      standardEventProperties: [
+        {attributeName: 'test', attributeValue: 'value'}
+      ]
+      // identifyCustomer is undefined - should not call exponea.identify
+    };
+    
+    let identifyCalled = false;
+    mock('callInWindow', function(method, param1, param2) {
+      if (method === 'exponea.identify') {
+        identifyCalled = true;
+      }
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+    
+    assertThat(identifyCalled).isFalse();
+- name: Test multiple operations
+  code: |-
+    const testData = {
+      eventTrackingRadio: 'standardEvent',
+      standardEventList: 'purchase',
+      standardEventProperties: [
+        {attributeName: 'item_id', attributeValue: 'SKU123'}
+      ],
+      updateCustomerAttributes: [
+        {attributeName: 'last_purchase', attributeValue: 'SKU123'}
+      ],
+      identifyCustomer: [
+        {attributeName: 'email', attributeValue: 'buyer@example.com'}
+      ]
+    };
+    
+    const calls = [];
+    mock('callInWindow', function(method, param1, param2) {
+      calls.push({method: method, param1: param1, param2: param2});
+      return true;
+    });
+    
+    mock('injectScript', function(url, callback) {
+      callback();
+    });
+    
+    runCode(testData);
+    
+    assertThat(calls.length).isEqualTo(3);
+    assertThat(calls[0].method).isEqualTo('exponea.track');
+    assertThat(calls[1].method).isEqualTo('exponea.update');
+    assertThat(calls[2].method).isEqualTo('exponea.identify');
 
 
 ___NOTES___
