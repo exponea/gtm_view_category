@@ -1,6 +1,8 @@
 homepage: "https://exponea.com/"
 documentation: "https://github.com/exponea/gtm_view_category/blob/master/README.md"
 versions:
+  - sha: fa30c6c053c7dbd5cdf916f4738b6d6226a56a43
+    changeNotes: Allow tracking events with empty properties.
   - sha: f118270d6a9989ee532deda06108122bfeebe32c
     changeNotes: Release of Exponea Tag.
   - sha: 9d33d33618de2a42907a7958a4393ecb86af4924
